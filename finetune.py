@@ -122,12 +122,14 @@ def train(
                 g_loss_accum = 0.0
                 c_loss_accum = 0.0
 
-        # epoch end checkpoint
         gen_path = os.path.join(out_dir, f"ResUnet_epoch_{epoch}.pt")
         crit_path = os.path.join(out_dir, f"PatchGAN_epoch_{epoch}.pt")
         torch.save(generator.state_dict(), gen_path)
         torch.save(critic.state_dict(), crit_path)
         print(f"Saved checkpoints: {gen_path}, {crit_path}")
+
+        prune_checkpoints(out_dir, prefix='ResUnet', keep=5)
+        prune_checkpoints(out_dir, prefix='PatchGAN', keep=5)
 
 
 def find_latest_weight(path, pattern='*.pt'):
@@ -140,6 +142,21 @@ def find_latest_weight(path, pattern='*.pt'):
     elif os.path.isfile(path):
         return path
     return None
+
+
+def prune_checkpoints(out_dir, prefix='ResUnet', keep=5):
+    pattern = os.path.join(out_dir, f"{prefix}_*.pt")
+    files = glob.glob(pattern)
+    if len(files) <= keep:
+        return
+    files = sorted(files, key=os.path.getmtime)
+    to_remove = files[:-keep]
+    for f in to_remove:
+        try:
+            os.remove(f)
+            print('Removed old checkpoint', f)
+        except Exception:
+            pass
 
 
 def parse_args():
