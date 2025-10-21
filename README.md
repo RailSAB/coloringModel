@@ -3,7 +3,7 @@
 
 This folder contains a modularized and runnable extraction of the notebook [`pix2pix-image-colorization-with-conditional-wgan.ipynb`](https://www.kaggle.com/code/salimhammadi07/pix2pix-image-colorization-with-conditional-wgan/notebook).
 
-Contents
+## Contents
 
 - `models.py` — generator (ResUnet) and critic (PatchGAN) + `build_models()` helper.
 - `dataset.py` — `ImageColorizationDataset` returning (ab, L) tensors.
@@ -13,7 +13,9 @@ Contents
 - `inference.py` — inference CLI (single image or input folder -> output folder). Auto-finds latest weight in a directory.
 - `requirements.txt` — packages used.
 
-Quick workflow
+## Quick workflow
+
+Example provided on [kaggle](https://www.kaggle.com/code/railsabirov/colorizationmodelfinetune)
 
 1. Preprocess your RGB images (PNG/JPG) into numpy arrays:
 
@@ -52,7 +54,7 @@ Batch (folder -> folder):
 python inference.py --input /kaggle/input/my_images --output /kaggle/working/out_images --weights ./checkpoints
 ```
 
-Notes about weights and normalization
+## Notes about weights and normalization
 
 - The preprocessing and model code follow this convention:
 	- L channel is scaled to [0,1] (when converting back to RGB we multiply by 100 to get the L* value for LAB).
